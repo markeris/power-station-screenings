@@ -35,7 +35,7 @@
   });
 
   // Fetch your data and add markers
-  fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec')
+  fetch('https://script.googleusercontent.com/macros/echo?user_content_key=AehSKLhLe_6ZvwgDFrkEDGb1X7b8VvQMCeBI-LRANZ83SqkhKgK4EmFelNKmGw_HC2SW0xu4727Sd7apNnbpwr9mdvwmJz2nPIPkTu60JjIh97tfEJ6r0RyHkQBWoXu2DfJGUfcI8PFHaD-GETy8wHXKLRMy4hG4bn4WIQd2B83ZppuvWzuj_E46rLRescztnOXIOX_x_d0Aa6i6duFviS8MLjMmlMnOOH0wZ5Umxd_PfJc0mwuL4ntH3xgvDU6G7Kci18nc7IwU4cWe_u3eUGxyMfpqUoDMrg&lib=MMzyhQsx68MdqrmnPNDvze7QZHlojl1UC')
     .then(response => response.json())
     .then(data => {
       if (data.sheet1 && Array.isArray(data.sheet1)) {
@@ -63,4 +63,5 @@
 
 </body>
 </html>
+
 
