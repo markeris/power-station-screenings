@@ -35,7 +35,7 @@
   });
 
   // Fetch your data and add markers
-  fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec')
+  fetch('https://api.sheety.co/4060be44d280a2cb9e0be2cfc6bca5fa/cinemaScreeningsData/sheet1')
     .then(response => response.json())
     .then(data => {
       if (data.sheet1 && Array.isArray(data.sheet1)) {
@@ -55,4 +55,5 @@
 
 </body>
 </html>
+
 
