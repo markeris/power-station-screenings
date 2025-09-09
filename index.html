@@ -38,14 +38,14 @@
   fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec')
     .then(response => response.json())
     .then(data => {
-      if (data.sheet1 && Array.isArray(data.sheet1)) {
-        data.sheet1.forEach(s => {
+      if (Array.isArray(data)) {
+        data.forEach(s => {
           const lat = parseFloat(s.latitude);
           const lng = parseFloat(s.longitude);
 
           if (!isNaN(lat) && !isNaN(lng)) {
             const popupContent = `<strong>${s.cinemaname}</strong><br>${s.screeningdate}<br>` +
-              (s.url ? `<a href="${s.url}" target="_blank">More Details</a>` : 'No Website Details Currently Available');
+              (s.URL ? `<a href="${s.URL}" target="_blank">More Details</a>` : 'No Website Details Currently Available');
 
             L.marker([lat, lng], { icon: coralMarker })
               .addTo(map)
@@ -63,6 +63,3 @@
 
 </body>
 </html>
-
-
-
