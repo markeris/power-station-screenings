@@ -34,14 +34,16 @@
     popupAnchor: [0, -45]
   });
 
-  // Fetch your data and add markers
-  fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec')
+  // Fetch your data and add markers with debugging
+  fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec?nocache=' + Date.now())
     .then(response => response.json())
     .then(data => {
+      console.log('Fetched data:', data);
+
       if (Array.isArray(data)) {
         data.forEach(s => {
-          const lat = parseFloat(s.latitude);
-          const lng = parseFloat(s.longitude);
+          const lat = parseFloat(s.Latitude);
+          const lng = parseFloat(s.Longitude);
 
           if (!isNaN(lat) && !isNaN(lng)) {
             const popupContent = `<strong>${s.cinemaname}</strong><br>${s.screeningdate}<br>` +
@@ -63,4 +65,3 @@
 
 </body>
 </html>
-
