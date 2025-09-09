@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>UK Cinema Screenings</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf‑8" />
+  <meta name="viewport" content="width=device‑width, initial‑scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     body, html { margin: 0; padding: 0; }
@@ -16,7 +16,7 @@
 
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
-  const map = L.map('map').setView([54.5, -3], 6); // UK centered
+  const map = L.map('map').setView([54.5, -3], 6);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
@@ -24,43 +24,44 @@
 
   const coralMarker = L.divIcon({
     className: 'custom-marker',
-    html: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
-        <path fill="#fe8768" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
-      </svg>
-    `,
+    html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
+             <path fill="#fe8768" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
+           </svg>`,
     iconSize: [32, 45],
     iconAnchor: [16, 45],
     popupAnchor: [0, -45]
   });
 
   fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec')
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-      if (Array.isArray(data)) {
-        data.forEach(s => {
-          const lat = parseFloat(s.Latitude);
-          const lng = parseFloat(s.Longitude);
+      console.log('Fetched data:', data);  // Inspect structure here
 
-          if (!isNaN(lat) && !isNaN(lng)) {
-            const popupHTML = `
-              <strong>${s.cinemaname}</strong><br>
-              ${s.screeningdate}<br>
-              ${s.URL ? `<a href="${s.URL}" target="_blank">More Details</a>` : 'No URL available'}
-            `;
-
-            L.marker([lat, lng], { icon: coralMarker })
-              .addTo(map)
-              .bindPopup(popupHTML);
-          } else {
-            console.warn('Skipping invalid coordinates:', s);
-          }
-        });
-      } else {
-        console.error('Unexpected data format:', data);
+      if (!Array.isArray(data)) {
+        console.error('Expected an array, but got:', data);
+        return;
       }
+
+      data.forEach(s => {
+        const lat = parseFloat(s.Latitude);
+        const lng = parseFloat(s.Longitude);
+
+        console.log(`Entry: ${s.cinemaname}, Lat:`, s.Latitude, 'Lng:', s.Longitude, 'Parsed:', lat, lng);
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+          L.marker([lat, lng], { icon: coralMarker })
+            .addTo(map)
+            .bindPopup(
+              `<strong>${s.cinemaname || ''}</strong><br>
+              ${s.screeningdate || ''}<br>
+              ${s.URL ? `<a href="${s.URL}" target="_blank">More Details</a>` : 'No URL available'}`
+            );
+        } else {
+          console.warn('Skipping invalid coordinates for', s.cinemaname, s.Latitude, s.Longitude);
+        }
+      });
     })
-    .catch(error => console.error('Error fetching screenings data:', error));
+    .catch(err => console.error('Error fetching data:', err));
 </script>
 
 </body>
