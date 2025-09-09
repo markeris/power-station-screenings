@@ -3,7 +3,7 @@
 <head>
   <title>UK Cinema Screenings</title>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     body, html { margin: 0; padding: 0; }
@@ -14,6 +14,12 @@
 
 <div id="map"></div>
 
+
+screenings.forEach(s => {
+  L.marker([s.latitude, s.longitude]).addTo(map)
+    .bindPopup(`<strong>${s.filmTitle}</strong><br>${s.cinemaName}<br><a href="${s.url}" target="_blank">View Screening</a>`);
+});
+
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script>
   const map = L.map('map').setView([54.5, -3], 6); // UK centered
@@ -22,36 +28,30 @@
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  const coralMarker = L.divIcon({
-    className: 'custom-marker',
-    html: `
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
-        <path fill="#fe8768" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
-      </svg>
-    `,
-    iconSize: [32, 45],
-    iconAnchor: [16, 45],
-    popupAnchor: [0, -45]
-  });
+const coralMarker = L.divIcon({
+  className: 'custom-marker',
+  html: `
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
+      <path fill="#fe8768" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
+    </svg>
+  `,
+  iconSize: [32, 45],
+  iconAnchor: [16, 45],
+  popupAnchor: [0, -45]
+});
 
-  // Fetch your data and add markers
-  fetch('https://api.sheety.co/4060be44d280a2cb9e0be2cfc6bca5fa/cinemaScreeningsData/sheet1')
+
+  fetch('https://script.google.com/macros/s/AKfycbxCLarLw07AqPCnJmL_kbzCn9ETwt7MXIqoBUSUxmUWOMlY8GJ3iONFZ4cb3gdAr-QI/exec') // Replace with your Sheety URL
     .then(response => response.json())
     .then(data => {
-      if (data.sheet1 && Array.isArray(data.sheet1)) {
-        data.sheet1.forEach(s => {
-          const popupContent = `<strong>${s.cinemaname}</strong><br>${s.screeningdate}<br>` +
-            (s.url ? `<a href="${s.url}" target="_blank">More Details</a>` : 'No Website Details Currently Available');
-          L.marker([s.latitude, s.longitude], { icon: coralMarker })
-            .addTo(map)
-            .bindPopup(popupContent);
-        });
-      } else {
-        console.error('Screenings data is missing or invalid');
-      }
-    })
-    .catch(error => console.error('Error fetching screenings data:', error));
+      data.sheet1.forEach(s => {
+        L.marker([s.latitude, s.longitude], { icon: coralMarker })
+.addTo(map)
+          .bindPopup(`<strong>${s.cinemaname}</strong><br>${s.screeningdate}<br><a href="${s.url}" target="_blank">More Details</a>`);
+      });
+    });
 </script>
+
 
 </body>
 </html>
