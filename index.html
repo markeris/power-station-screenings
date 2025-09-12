@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UK Cinema Screenings</title>
+  <title>UK Cinema Screenings (Accessible)</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
@@ -27,22 +27,22 @@
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  // Marker for CURRENT screenings (coral)
-  const coralMarker = L.divIcon({
+  // CURRENT screenings marker (blue circle)
+  const currentMarker = L.divIcon({
     className: 'custom-marker',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
-             <path fill="#fe8768" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
+             <circle cx="16" cy="22" r="12" fill="#0072B2" />
            </svg>`,
     iconSize: [32, 45],
     iconAnchor: [16, 45],
     popupAnchor: [0, -45]
   });
 
-  // Marker for PAST screenings (#899499)
+  // PAST screenings marker (orange diamond)
   const pastMarker = L.divIcon({
     className: 'custom-marker',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
-             <path fill="#899499" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
+             <polygon points="16,6 26,22 16,38 6,22" fill="#E69F00" />
            </svg>`,
     iconSize: [32, 45],
     iconAnchor: [16, 45],
@@ -66,7 +66,7 @@
         const status = (s.Status || '').trim().toUpperCase();
 
         if (!isNaN(lat) && !isNaN(lng)) {
-          const markerIcon = status === 'PAST' ? pastMarker : coralMarker;
+          const markerIcon = status === 'PAST' ? pastMarker : currentMarker;
 
           L.marker([lat, lng], { icon: markerIcon })
             .addTo(map)
@@ -85,6 +85,3 @@
 
 </body>
 </html>
-
-
-
