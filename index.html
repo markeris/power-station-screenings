@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UK Cinema Screenings (Accessible)</title>
+  <title>UK Cinema Screenings (Accessible with Legend)</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <!-- Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  
+
   <style>
     body, html { margin: 0; padding: 0; }
     #map { height: 100vh; width: 100%; }
@@ -27,22 +27,51 @@
     attribution: '&copy; OpenStreetMap contributors'
   }).addTo(map);
 
-  // CURRENT screenings marker (blue circle)
+  // Legend control
+  const legend = L.control({ position: 'bottomright' });
+
+  legend.onAdd = function (map) {
+    const div = L.DomUtil.create('div', 'info legend');
+
+    div.style.background = 'white';
+    div.style.padding = '8px';
+    div.style.borderRadius = '5px';
+    div.style.boxShadow = '0 0 15px rgba(0,0,0,0.2)';
+    div.style.lineHeight = '24px';
+    div.style.color = '#333';
+    div.style.fontFamily = 'Arial, sans-serif';
+    div.style.fontSize = '14px';
+
+    div.innerHTML = `
+      <div><svg width="20" height="28" viewBox="0 0 32 45" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+        <path fill="#0072B2" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
+      </svg> Current</div>
+      <div style="margin-top:6px;"><svg width="20" height="28" viewBox="0 0 32 45" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;">
+        <path fill="#E69F00" d="M8 8h16a8 8 0 0 1 8 8v6c0 9-16 23-16 23S0 31 0 22v-6a8 8 0 0 1 8-8z"/>
+      </svg> Past</div>
+    `;
+
+    return div;
+  };
+
+  legend.addTo(map);
+
+  // CURRENT marker (Blue pin, original shape)
   const currentMarker = L.divIcon({
     className: 'custom-marker',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
-             <circle cx="16" cy="22" r="12" fill="#0072B2" />
+             <path fill="#0072B2" d="M16 0C7 0 0 7 0 16c0 12 16 29 16 29s16-17 16-29c0-9-7-16-16-16zm0 24a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
            </svg>`,
     iconSize: [32, 45],
     iconAnchor: [16, 45],
     popupAnchor: [0, -45]
   });
 
-  // PAST screenings marker (orange diamond)
+  // PAST marker (Orange rounded square pin)
   const pastMarker = L.divIcon({
     className: 'custom-marker',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
-             <polygon points="16,6 26,22 16,38 6,22" fill="#E69F00" />
+             <path fill="#E69F00" d="M8 8h16a8 8 0 0 1 8 8v6c0 9-16 23-16 23S0 31 0 22v-6a8 8 0 0 1 8-8z"/>
            </svg>`,
     iconSize: [32, 45],
     iconAnchor: [16, 45],
