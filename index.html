@@ -123,10 +123,12 @@
       });
 
       // Zoom to show all markers
-      map.fitBounds(bounds);
+    // Optionally, pan or zoom if needed — or remove this line entirely
+// map.setView([54.5, -3], 6);  // Already done at the top
     })
     .catch(err => console.error('Error fetching data:', err));
 </script>
 
 </body>
 </html>
+
