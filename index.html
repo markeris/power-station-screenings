@@ -56,7 +56,7 @@
 
   legend.addTo(map);
 
-  // CURRENT marker (Blue pin, original shape)
+  // CURRENT marker (Blue pin)
   const currentMarker = L.divIcon({
     className: 'custom-marker',
     html: `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="45" viewBox="0 0 32 45">
@@ -89,6 +89,8 @@
         return;
       }
 
+      const bounds = L.latLngBounds();
+
       data.forEach(s => {
         const lat = parseFloat(s.Latitude);
         const lng = parseFloat(s.Longitude);
@@ -96,19 +98,32 @@
 
         if (!isNaN(lat) && !isNaN(lng)) {
           const markerIcon = status === 'PAST' ? pastMarker : currentMarker;
-          const zIndex = status === 'PAST' ? 0 : 10000; // Prioritise CURRENT markers
+          const zIndex = status === 'PAST' ? 0 : 10000;
+
+          // Collect all non-empty URLs from the row
+          const urls = [s.URL, s['URL 2'], s['URL 3'], s['URL 4']].filter(u => u && u.trim() !== '');
+          const urlLinks = urls.length > 0
+            ? urls.map(u => `<a href="${u}" target="_blank">${u}</a>`).join('<br>')
+            : 'No URLs available';
+
+          const popupHTML = `
+            <strong>${s.cinemaname || ''}</strong><br>
+            ${s.screeningdate || ''}<br>
+            ${urlLinks}
+          `;
 
           L.marker([lat, lng], { icon: markerIcon, zIndexOffset: zIndex })
             .addTo(map)
-            .bindPopup(
-              `<strong>${s.cinemaname || ''}</strong><br>
-              ${s.screeningdate || ''}<br>
-              ${s.URL ? `<a href="${s.URL}" target="_blank">More Details</a>` : 'No URL available'}`
-            );
+            .bindPopup(popupHTML);
+
+          bounds.extend([lat, lng]);
         } else {
           console.warn('Skipping invalid coordinates for', s.cinemaname, s.Latitude, s.Longitude);
         }
       });
+
+      // Fit map view to all markers
+      map.fitBounds(bounds);
     })
     .catch(err => console.error('Error fetching data:', err));
 </script>
